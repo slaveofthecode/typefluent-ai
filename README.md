@@ -82,7 +82,6 @@ Every architectural decision, document and implementation will be publicly docum
 
 ```text
 .
-├── .github/
 ├── .harness/
 ├── assets/
 ├── src/
