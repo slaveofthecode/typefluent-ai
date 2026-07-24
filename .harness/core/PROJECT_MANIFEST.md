@@ -1,3 +1,5 @@
+<!-- ¿What's the project? -->
+
 # TypeFluentAI - Project Manifest
 
 ## Mission

@@ -1,17 +1,99 @@
-# TypeFluentAI
+<p align="center">
+  <img src="assets/logo.png" width="220" alt="TypeFluentAI Logo">
+</p>
 
-> Learn English by writing, not by reading.
+<h1 align="center">TypeFluentAI</h1>
 
-TypeFluentAI is a local AI-powered writing coach designed to help IT professionals improve their written English through active practice instead of passive corrections.
+<p align="center">
+  <strong>Learn English by Writing.</strong>
+</p>
 
-Unlike traditional AI chatbots, TypeFluentAI encourages users to think, write, rewrite and learn through repetition.
+<p align="center">
+  A Local AI-powered English Writing Coach
+</p>
 
-This project is built as a learning journey focused on:
+---
 
-- Local AI
+TypeFluentAI is an open-source Local AI project designed to help people improve their written English through active learning instead of passive correction.
+
+Unlike traditional AI chatbots that simply rewrite your text, TypeFluentAI encourages you to think, write, understand your mistakes, rewrite your own answers and learn through deliberate practice.
+
+Although the initial focus is on software engineers and IT professionals, the learning model is designed to be applicable to anyone who wants to become a more confident English writer.
+
+---
+
+## Why TypeFluentAI?
+
+Most AI tools optimize productivity.
+
+TypeFluentAI optimizes learning.
+
+The objective is not to generate better English for the user.
+
+The objective is to help the user write better English by themselves.
+
+---
+
+## Project Goals
+
+- Build a complete Local AI application.
+- Explore Harness Engineering through a real-world project.
+- Design a modular Agent-Oriented Architecture.
+- Create an AI that teaches instead of simply answering.
+- Document the entire development journey publicly.
+
+---
+
+## Core Principles
+
+- Local AI First
+- Privacy by Design
+- Active Learning
+- Agent-Oriented Architecture
 - Harness Engineering
-- Agent-based architecture
-- Active learning
-- Privacy-first design
+- Open Source
+- Build in Public
 
-> 🚧 This project is currently under active development.
+---
+
+## Development Philosophy
+
+This project follows one simple rule:
+
+> Every important architectural decision must be documented before implementation.
+
+The Harness is considered the source of truth for the entire project.
+
+---
+
+## Current Status
+
+🚧 TypeFluentAI is currently in the Architecture & Design phase.
+
+No production code has been written yet.
+
+The current focus is on defining the learning philosophy, AI architecture and project foundations before implementation begins.
+
+Every architectural decision, document and implementation will be publicly documented as the project evolves.
+
+---
+
+## Repository Structure
+
+```text
+.
+├── .github/
+├── .harness/
+├── assets/
+├── src/
+├── README.md
+├── LICENSE
+├── package.json
+└── .gitignore
+```
+
+---
+
+## License
+
+This project is licensed under the MIT License.
