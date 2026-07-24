@@ -1,0 +1,8 @@
+{
+  "name": "typefluent-ai",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A local AI-powered English writing coach.",
+  "license": "MIT"
+}
