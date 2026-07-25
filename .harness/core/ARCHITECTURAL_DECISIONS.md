@@ -130,3 +130,71 @@ The abstraction should also be evaluated over time to confirm it remains suffici
 
 ---
 
+# Decision #003 — Learning Coach Composition for the First Prototype
+
+**Date:** 2026-07-25
+**Status:** Accepted
+**Affects:** Learning engine, agent architecture
+
+## Context
+
+The architecture describes an agent-oriented system where a Learning Coach coordinates specialized internal agents. However, the first prototype must reconcile this vision with the practical need to validate the Learning Loop before introducing agent complexity.
+
+The Learning Loop — Prompt, Write, Analyze, Understand, Rewrite, Practice, Progress — is the core behavior that must be proven. How the Learning Coach internally handles this loop is a separate concern that should not block the first working implementation.
+
+## Decision
+
+TypeFluentAI's first prototype will use a single Learning Coach backed by a single LLM call.
+
+This is an intentional simplification to validate the Learning Loop before introducing internal agent orchestration.
+
+The first prototype is not a multi-agent implementation.
+
+The architecture must preserve a clear boundary around the Learning Coach so that specialized internal agents can be introduced later without requiring a fundamental redesign of the user interaction layer or learning engine.
+
+## Rationale
+
+The primary goal of the first prototype is to validate learning behavior, not agent architecture.
+
+A single LLM call with a well-structured system prompt can demonstrate the full Learning Loop:
+
+- Presenting a writing prompt
+- Receiving user text
+- Analyzing writing quality
+- Providing feedback
+- Guiding the user to rewrite
+- Offering practice opportunities
+- Tracking improvement
+
+This approach produces the fastest path to a working system that can be tested, iterated and evaluated against the learning philosophy.
+
+Starting with agent dispatch risks building infrastructure before knowing whether the learning model works. Premature agent complexity may also obscure the real question: does the system actually help users learn?
+
+The provider abstraction defined in Decision #002 ensures the LLM layer is already decoupled. The Learning Coach can be decomposed into internal agents later once the learning behavior is proven and a specific responsibility benefits from separation.
+
+The important architectural principle behind this decision: future internal agents should be introduced when there is a demonstrated responsibility that benefits from separation, not simply for the sake of having multiple agents.
+
+## Implications
+
+- The first prototype implements a single Learning Coach as one LLM call
+- The system prompt for the Coach must encode all learning behavior: analysis, feedback, correction prioritization and progress awareness
+- The code must preserve a clear boundary around the Learning Coach so it can be internally restructured later
+- No agent orchestration, dispatch or inter-agent communication is required for the first prototype
+- The Learning Coach is the only component that interacts with the LLM and the user
+- This is not a permanent architecture — it is a documented starting point
+
+## Future Considerations
+
+The Learning Coach will eventually be decomposed into specialized internal agents when the system demonstrates a clear need. Potential future agents include:
+
+- Grammar Analysis Agent
+- Vocabulary Agent
+- Correction Prioritization Agent
+- Progress Tracking Agent
+- Exercise Generation Agent
+
+Agent decomposition should be driven by observed responsibility boundaries in practice, not by theoretical separation of concerns alone. Each new agent must justify its existence by solving a problem that the monolithic Coach cannot handle effectively.
+
+The boundary around the Learning Coach must be preserved throughout this evolution. The user should continue to interact with a single Coach regardless of how many internal agents collaborate behind it.
+
+---
