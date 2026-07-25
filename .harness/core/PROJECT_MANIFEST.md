@@ -1,4 +1,4 @@
-<!-- What TypeFluentAI is -->
+<!-- What TypeFluentAI is : qué estamos construyendo -->
 
 # TypeFluentAI - Project Manifest
 

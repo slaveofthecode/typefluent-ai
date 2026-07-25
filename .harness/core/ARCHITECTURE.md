@@ -1,4 +1,4 @@
- <!-- How TypeFluentAI is organized -->
+ <!-- How TypeFluentAI is organized : cómo queremos organizarlo -->
 
 # TypeFluentAI - Architecture
 

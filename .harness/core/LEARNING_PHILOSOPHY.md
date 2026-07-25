@@ -1,4 +1,4 @@
-<!-- How TypeFluentAI teaches -->
+<!-- How TypeFluentAI teaches : cómo queremos que enseñe -->
 
 # TypeFluentAI - Learning Philosophy
 
