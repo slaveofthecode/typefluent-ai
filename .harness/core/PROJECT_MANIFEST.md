@@ -1,4 +1,4 @@
-<!-- ¿What's the project? -->
+<!-- What TypeFluentAI is -->
 
 # TypeFluentAI - Project Manifest
 

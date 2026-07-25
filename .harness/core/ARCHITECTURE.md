@@ -1,4 +1,4 @@
- <!-- ¿How to think the TypeFluentAI? -->
+ <!-- How TypeFluentAI is organized -->
 
 # TypeFluentAI - Architecture
 
