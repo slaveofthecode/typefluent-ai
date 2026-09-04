@@ -198,3 +198,63 @@ Agent decomposition should be driven by observed responsibility boundaries in pr
 The boundary around the Learning Coach must be preserved throughout this evolution. The user should continue to interact with a single Coach regardless of how many internal agents collaborate behind it.
 
 ---
+
+# Decision #004 — Web UI Replaces CLI as the Interface
+
+**Date:** 2026-09-03
+**Status:** Accepted
+**Affects:** User interaction layer, learning engine
+
+## Context
+
+Decision #001 chose a CLI as the first user interface. Its purpose was to validate the Learning Loop with the smallest possible interface before introducing frontend complexity.
+
+That validation goal remains valid: the Learning Loop and the single Learning Coach (Decision #003) are the core behaviors to prove. However, the interaction layer itself has evolved. A CLI is a poor fit for the project's long-term identity as a public, self-hostable, open-source application.
+
+TypeFluentAI aspires to be a product that anyone can self-host and use from a web browser. A CLI limits discoverability, accessibility and the richness of feedback presentation that the Learning Philosophy describes (streamed feedback, structured practice, progress visualization).
+
+## Decision
+
+TypeFluentAI will use a web UI as its user interface, replacing the CLI as the default interaction layer.
+
+The application will be built as a full-stack Next.js application:
+
+- React with TypeScript for the user interface.
+- Next.js API routes as the local backend that hosts the Learning Coach.
+- The Learning Coach communicates with a local language model through the provider abstraction established in Decision #002.
+
+The web UI communicates only with the local backend. The browser never calls the LLM directly.
+
+The distributed model is intentionally self-hosted and local-first: each deployment runs with its own local Ollama (or other local provider) on the machine or server where the app is self-hosted. The browser talks to the local Next.js backend, and the backend talks to the local LLM. No cloud API is used at runtime.
+
+## Rationale
+
+A web UI is the most appropriate interface for an interactive learning coach that streams feedback and guides the user through a repeated write-rewrite-practice loop. The Learning Loop is fundamentally textual, but it benefits from a richer presentation than a CLI can naturally provide.
+
+Next.js is chosen because it is a well-known, full-stack framework that keeps the frontend and the local backend in a single deployable project. This reduces self-hosting complexity: one repository, one dependency install, one server process, one build. That simplicity directly serves the open-source self-hosted distribution model.
+
+Because each self-hoster runs the app on their own machine or server, the "Local AI First" and "Privacy by Design" principles are preserved. The user's learning data and language model inference remain local. The migration to a web UI does not imply moving to a cloud LLM or a managed multi-tenant service.
+
+The CLI is retired as the default interface but remains a legitimate possible interface because the learning engine stays interface-agnostic, as originally intended in Decision #001.
+
+The single Learning Coach as one LLM call (Decision #003) is retained for the first web prototype. The provider abstraction (Decision #002) remains the boundary between the application and the local LLM.
+
+## Implications
+
+- The first web prototype is a full-stack Next.js application with React + TypeScript.
+- A backend API route (e.g. `/api/coach`) hosts the Learning Coach and composes the Learning Loop system prompt.
+- The learning engine and provider abstraction remain UI-agnostic so the interface can evolve without rewriting core logic.
+- The browser communicates only with the local backend; the backend communicates with the local LLM through the provider abstraction.
+- Self-hosting requires the deploying user to install and run a local LLM runtime (e.g. Ollama) with a model pulled locally.
+- The repository will host its presentation assets: a README as the repository landing page and a `docs/` directory providing a GitHub Pages landing site.
+- No cloud APIs, remote servers, telemetry or external data transmission are introduced.
+
+## Future Considerations
+
+The web UI is the current interface. Future interfaces (desktop, mobile, or a revived CLI) should connect to the same interface-agnostic learning engine and provider abstraction.
+
+The provider abstraction may later need to support streaming responses and structured output as the Learning Coach's requirements evolve.
+
+Should distribution ever shift toward a managed public service, that would be a new decision requiring the introduction of a hosted LLM backend and a departure from the current local-first model. No such decision is being made here.
+
+---

@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TypeFluentAI — Learn English by Writing</title>
+  <meta name="description" content="An open-source, self-hosted, local AI-powered English writing coach that helps you learn through active practice instead of passive correction." />
+  <style>
+    :root {
+      --bg: #0f172a;
+      --bg-soft: #151f38;
+      --card: #1b2742;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --primary: #60a5fa;
+      --accent: #fbbf24;
+      --ok: #34d399;
+      --line: #283452;
+      --radius: 16px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: linear-gradient(180deg, #0b1020 0%, var(--bg) 40%, #101a33 100%);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: var(--primary); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .container { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
+
+    /* Nav */
+    header.nav {
+      position: sticky; top: 0; z-index: 10;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    .nav-brand { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: .2px; }
+    .nav-brand img { width: 30px; height: 30px; border-radius: 6px; }
+    .nav-links { display: flex; gap: 22px; font-size: 14px; font-weight: 500; color: var(--muted); }
+    .nav-links a { color: var(--muted); }
+    .nav-links a:hover { color: var(--text); }
+
+    /* Hero */
+    .hero { text-align: center; padding: 88px 24px 64px; }
+    .hero img.logo { width: 130px; height: 130px; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,.45); }
+    .hero h1 { font-size: 3rem; margin-top: 28px; letter-spacing: -.5px; }
+    .hero .tagline { font-size: 1.35rem; color: var(--primary); font-weight: 600; margin-top: 10px; }
+    .hero .sub { max-width: 640px; margin: 22px auto 0; color: var(--muted); font-size: 1.05rem; }
+    .hero .badges { margin-top: 26px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+    .badge {
+      font-size: 12.5px; font-weight: 600; padding: 6px 12px; border-radius: 999px;
+      border: 1px solid var(--line); background: var(--card); color: var(--muted);
+    }
+    .hero .cta { margin-top: 34px; display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-block; padding: 12px 22px; border-radius: 10px; font-weight: 600; font-size: 15px;
+      transition: transform .12s ease, background .2s ease;
+    }
+    .btn:hover { text-decoration: none; transform: translateY(-1px); }
+    .btn-primary { background: var(--primary); color: #0b1020; }
+    .btn-primary:hover { background: #7bb3ff; }
+    .btn-ghost { border: 1px solid var(--line); color: var(--text); }
+    .btn-ghost:hover { background: var(--card); }
+
+    /* Intro */
+    .intro { max-width: 760px; margin: 0 auto 70px; text-align: center; color: var(--muted); }
+    .intro strong { color: var(--text); }
+
+    /* Sections */
+    section { padding: 64px 0; }
+    .section-title { font-size: 1.7rem; text-align: center; margin-bottom: 14px; letter-spacing: -.3px; }
+    .section-desc { text-align: center; color: var(--muted); max-width: 680px; margin: 0 auto 40px; }
+
+    /* Learning loop */
+    .loop { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; align-items: center; margin: 30px 0 10px; }
+    .loop-step {
+      background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+      padding: 14px 20px; font-weight: 600; min-width: 120px; text-align: center;
+    }
+    .loop-arrow { color: var(--primary); font-weight: 700; }
+
+    /* Cards grid */
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; }
+    .card h3 { color: var(--primary); margin-bottom: 8px; font-size: 1.05rem; }
+    .card p { color: var(--muted); font-size: .95rem; }
+
+    /* Principles */
+    .principles { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+    .principle { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; font-weight: 600; }
+
+    /* Harness / build */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 34px; align-items: start; }
+    @media (max-width: 760px) { .two-col { grid-template-columns: 1fr; } }
+    .harness-list { list-style: none; margin-top: 16px; }
+    .harness-list li { padding: 10px 0; border-bottom: 1px solid var(--line); }
+    .harness-list li b { color: var(--text); }
+    .harness-list li small { display: block; color: var(--muted); }
+    .rule {
+      margin-top: 22px; padding: 16px 18px; border-left: 3px solid var(--accent);
+      background: var(--bg-soft); border-radius: 8px; font-style: italic; color: var(--text);
+    }
+
+    /* ADR table */
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--line); font-size: .95rem; }
+    th { color: var(--muted); font-weight: 600; }
+    td:last-child { text-align: right; }
+    .status { color: var(--ok); font-weight: 600; }
+
+    /* Timeline */
+    .timeline { position: relative; margin: 20px auto 0; max-width: 560px; }
+    .timeline::before { content: ""; position: absolute; left: 14px; top: 0; bottom: 0; width: 2px; background: var(--line); }
+    .t-item { position: relative; padding-left: 48px; padding-bottom: 30px; }
+    .t-item::before {
+      content: ""; position: absolute; left: 8px; top: 4px; width: 14px; height: 14px;
+      background: var(--primary); border-radius: 50%; border: 3px solid var(--bg);
+    }
+    .t-item.done::before { background: var(--ok); }
+    .t-item.now::before { background: var(--accent); box-shadow: 0 0 0 4px rgba(251,191,36,.25); }
+    .t-item h4 { margin-bottom: 4px; }
+    .t-item p { color: var(--muted); font-size: .92rem; }
+
+    footer { border-top: 1px solid var(--line); padding: 34px 0 50px; text-align: center; color: var(--muted); font-size: .9rem; }
+  </style>
+</head>
+<body>
+
+  <header class="nav">
+    <div class="container nav-inner">
+      <div class="nav-brand">
+        <img src="../assets/logo-web.png" alt="TypeFluentAI">
+        <span>TypeFluentAI</span>
+      </div>
+      <nav class="nav-links">
+        <a href="#why">Why</a>
+        <a href="#learning">Learning</a>
+        <a href="#harness">Harness</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#roadmap">Roadmap</a>
+        <a href="https://github.com/slaveofthecode/typefluent-ai">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <img class="logo" src="../assets/logo-web.png" alt="TypeFluentAI Logo">
+      <h1>TypeFluentAI</h1>
+      <div class="tagline">Learn English by Writing.</div>
+      <p class="sub">An open-source, self-hosted AI writing coach that helps you improve your English through <strong>active practice</strong> — not passive correction. Your language model runs locally. Your data stays with you.</p>
+      <div class="badges">
+        <span class="badge">Local AI First</span>
+        <span class="badge">Privacy by Design</span>
+        <span class="badge">Open Source</span>
+        <span class="badge">Self-Hosted</span>
+        <span class="badge">Agent-Oriented</span>
+      </div>
+      <div class="cta">
+        <a class="btn btn-primary" href="https://github.com/slaveofthecode/typefluent-ai">View on GitHub</a>
+        <a class="btn btn-ghost" href="#harness">How the Harness was built</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="why">
+    <div class="container">
+      <h2 class="section-title">Why TypeFluentAI?</h2>
+      <div class="intro">
+        <p>Most AI tools optimize <strong>productivity</strong>. TypeFluentAI optimizes <strong>learning</strong>.</p>
+        <br>
+        <p>The objective is not to generate better English for you. The objective is to help you write better English <strong>by yourself</strong>.</p>
+      </div>
+      <div class="grid">
+        <div class="card"><h3>Guide, don't replace</h3><p>The AI is a teacher and coach. It explains, challenges and encourages — it never quietly rewrites everything for you.</p></div>
+        <div class="card"><h3>Active practice</h3><p>You think, write, understand your mistakes, and rewrite your own answers through deliberate practice.</p></div>
+        <div class="card"><h3>Local &amp; private</h3><p>The model runs on your machine via a local provider. Your writing and learning history remain yours.</p></div>
+        <div class="card"><h3>Built for professionals</h3><p>Initially focused on software engineers and IT professionals: interviews, standups, technical writing and more.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="learning" style="background: var(--bg-soft);">
+    <div class="container">
+      <h2 class="section-title">The Learning Loop</h2>
+      <p class="section-desc">The fundamental unit of learning — a deliberately designed cycle that turns every correction into practice.</p>
+      <div class="loop">
+        <div class="loop-step">Prompt</div><span class="loop-arrow">→</span>
+        <div class="loop-step">Write</div><span class="loop-arrow">→</span>
+        <div class="loop-step">Analyze</div><span class="loop-arrow">→</span>
+        <div class="loop-step">Understand</div><span class="loop-arrow">→</span>
+        <div class="loop-step">Rewrite</div><span class="loop-arrow">→</span>
+        <div class="loop-step">Practice</div><span class="loop-arrow">→</span>
+        <div class="loop-step">Progress</div>
+      </div>
+      <div class="grid" style="margin-top: 34px;">
+        <div class="card"><h3>Prompt</h3><p>The coach presents a meaningful writing challenge with a clear learning objective.</p></div>
+        <div class="card"><h3>Write</h3><p>You produce your own response, uninterrupted, expressing your ideas independently.</p></div>
+        <div class="card"><h3>Analyze</h3><p>The coach prioritizes mistakes that offer real learning value — not every imperfection.</p></div>
+        <div class="card"><h3>Understand</h3><p>You learn why an important correction matters before being asked to practice it.</p></div>
+        <div class="card"><h3>Rewrite</h3><p>You reconstruct the improved version yourself, reinforcing understanding.</p></div>
+        <div class="card"><h3>Practice</h3><p>Corrections become deliberate practice through active typing.</p></div>
+        <div class="card"><h3>Progress</h3><p>You recognize real improvements: fewer repeated mistakes, greater confidence.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="principles">
+    <div class="container">
+      <h2 class="section-title">Core Principles</h2>
+      <p class="section-desc">The values that guide every architectural decision.</p>
+      <div class="principles">
+        <div class="principle">✓ Local AI First</div>
+        <div class="principle">✓ Privacy by Design</div>
+        <div class="principle">✓ Active Learning</div>
+        <div class="principle">✓ Agent-Oriented Architecture</div>
+        <div class="principle">✓ Harness Engineering</div>
+        <div class="principle">✓ Open Source</div>
+        <div class="principle">✓ Build in Public</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="harness" style="background: var(--bg-soft);">
+    <div class="container">
+      <h2 class="section-title">The Harness</h2>
+      <p class="section-desc">How the project is built and documented — the source of truth behind TypeFluentAI.</p>
+      <div class="two-col">
+        <div>
+          <p style="color: var(--muted);">The <code>/.harness</code> directory is the project's long-term memory. Rather than storing knowledge only inside AI conversations, every important decision is documented so that developers and AI agents reason consistently about the system.</p>
+          <div class="rule">"Every important architectural decision must be documented before implementation."</div>
+        </div>
+        <div>
+          <ul class="harness-list">
+            <li>
+              <b>Project Manifest</b>
+              <small>Mission, vision, problem, solution and non-goals of the project.</small>
+            </li>
+            <li>
+              <b>Learning Philosophy</b>
+              <small>How the system teaches: principles, the learning loop, feedback and motivation.</small>
+            </li>
+            <li>
+              <b>Architecture</b>
+              <small>Agent-Oriented design: the Learning Coach and specialized internal agents.</small>
+            </li>
+            <li>
+              <b>Architectural Decisions (ADRs)</b>
+              <small>The chronological record of every accepted architectural decision.</small>
+            </li>
+            <li>
+              <b>Agent Guidelines</b>
+              <small>Rules governing how AI coding agents contribute to the codebase.</small>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="architecture">
+    <div class="container">
+      <h2 class="section-title">Architecture</h2>
+      <p class="section-desc">An Agent-Oriented Architecture with a single, purpose-built front door for the learner.</p>
+      <div class="grid">
+        <div class="card">
+          <h3>Learning Coach</h3>
+          <p>The only component that talks to the user. It understands intent, delegates work, combines results and communicates feedback.</p>
+        </div>
+        <div class="card">
+          <h3>Internal Agents</h3>
+          <p>Grammar analysis, vocabulary, exercise generation, progress tracking and more. They work behind the coach — never directly with the user.</p>
+        </div>
+        <div class="card">
+          <h3>Provider Abstraction</h3>
+          <p>The application stays decoupled from any specific local LLM, so providers like Ollama are replaceable and configurable.</p>
+        </div>
+      </div>
+      <div class="grid" style="margin-top: 20px;">
+        <div class="card" style="grid-column: 1 / -1; text-align:center; color: var(--muted);">
+          User → Learning Coach → Local LLM → Learning Coach → User
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="decisions" style="background: var(--bg-soft);">
+    <div class="container">
+      <h2 class="section-title">Architectural Decisions</h2>
+      <p class="section-desc">Each decision is documented with context, rationale, implications and future considerations.</p>
+      <table>
+        <thead>
+          <tr><th>#</th><th>Decision</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>#001</td><td>CLI as First User Interface</td><td class="status">Accepted</td></tr>
+          <tr><td>#002</td><td>Local LLM Provider Architecture</td><td class="status">Accepted</td></tr>
+          <tr><td>#003</td><td>Learning Coach Composition for the First Prototype</td><td class="status">Accepted</td></tr>
+          <tr><td>#004</td><td>Web UI Replaces CLI as the Interface</td><td class="status">Accepted</td></tr>
+        </tbody>
+      </table>
+      <p style="text-align:center; margin-top: 22px;"><a href="https://github.com/slaveofthecode/typefluent-ai/blob/main/.harness/core/ARCHITECTURAL_DECISIONS.md">Read the full decision log →</a></p>
+    </div>
+  </section>
+
+  <section id="roadmap">
+    <div class="container">
+      <h2 class="section-title">Roadmap</h2>
+      <p class="section-desc">Where the project has been and where it is heading.</p>
+      <div class="timeline">
+        <div class="t-item done">
+          <h4>Define the philosophy</h4>
+          <p>The learning philosophy and project foundation are documented in the Harness.</p>
+        </div>
+        <div class="t-item done">
+          <h4>Architect the system</h4>
+          <p>Agent-oriented architecture and the full decision log (ADR #001–#004).</p>
+        </div>
+        <div class="t-item done">
+          <h4>Document the Harness publicly</h4>
+          <p>Manifest, learning philosophy, architecture, decisions and agent guidelines made open.</p>
+        </div>
+        <div class="t-item now">
+          <h4>Implement the Web UI</h4>
+          <p>Full-stack Next.js + React app bringing the Learning Loop to life, with a local Ollama backend.</p>
+        </div>
+        <div class="t-item">
+          <h4>Validate the Learning Loop</h4>
+          <p>Run real writing sessions with a local model and confirm the learning behavior works.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p><strong>TypeFluentAI</strong> · Learn English by Writing</p>
+      <p style="margin-top: 8px;">Open source · MIT License · Built in public</p>
+      <p style="margin-top: 8px;"><a href="https://github.com/slaveofthecode/typefluent-ai">github.com/slaveofthecode/typefluent-ai</a></p>
+    </div>
+  </footer>
+
+</body>
+</html>
