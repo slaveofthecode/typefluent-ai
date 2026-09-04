@@ -9,12 +9,18 @@
 </p>
 
 <p align="center">
-  A Local AI-powered English Writing Coach
+  A Local AI-powered English Writing Coach · Open Source · Self-Hosted
+</p>
+
+<p align="center">
+  <a href="https://github.com/slaveofthecode/typefluent-ai"><img alt="GitHub" src="https://img.shields.io/badge/source-github-181717?logo=github"></a>
+  <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-blue"></a>
+  <a href="https://github.com/slaveofthecode/typefluent-ai/blob/main/.harness/core/ARCHITECTURAL_DECISIONS.md"><img alt="ADR" src="https://img.shields.io/badge/decisions-ADR-log"></a>
 </p>
 
 ---
 
-TypeFluentAI is an open-source Local AI project designed to help people improve their written English through active learning instead of passive correction.
+TypeFluentAI is an open-source Local AI project designed to help people improve their written English through **active learning** instead of passive correction.
 
 Unlike traditional AI chatbots that simply rewrite your text, TypeFluentAI encourages you to think, write, understand your mistakes, rewrite your own answers and learn through deliberate practice.
 
@@ -24,57 +30,129 @@ Although the initial focus is on software engineers and IT professionals, the le
 
 ## Why TypeFluentAI?
 
-Most AI tools optimize productivity.
+Most AI tools optimize **productivity**.
 
-TypeFluentAI optimizes learning.
+TypeFluentAI optimizes **learning**.
 
 The objective is not to generate better English for the user.
 
-The objective is to help the user write better English by themselves.
+The objective is to help the user write better English **by themselves**.
 
 ---
 
-## Project Goals
+## The Learning Loop
 
-- Build a complete Local AI application.
-- Explore Harness Engineering through a real-world project.
-- Design a modular Agent-Oriented Architecture.
-- Create an AI that teaches instead of simply answering.
-- Document the entire development journey publicly.
+The fundamental unit of TypeFluentAI is the **Learning Loop**, a deliberately designed sequence that guides the learner through practice:
+
+```text
+Prompt
+  ↓
+Write
+  ↓
+Analyze
+  ↓
+Understand
+  ↓
+Rewrite
+  ↓
+Practice
+  ↓
+Progress
+```
+
+- **Prompt** — the coach presents a meaningful writing challenge.
+- **Write** — the user produces their own response, without being interrupted.
+- **Analyze** — the coach prioritizes mistakes that offer real learning value.
+- **Understand** — the user understands *why* an important correction matters.
+- **Rewrite** — the user reconstructs the improved version themselves (never just accepts a fix).
+- **Practice** — corrections become deliberate, active practice through typing.
+- **Progress** — the user recognizes real improvement over time.
+
+The AI is a teacher and a coach — it guides, explains, suggests and challenges. It never replaces the learner's thinking.
 
 ---
 
-## Core Principles
+## Self-Hosted & Local AI First
 
-- Local AI First
-- Privacy by Design
-- Active Learning
-- Agent-Oriented Architecture
-- Harness Engineering
-- Open Source
-- Build in Public
+TypeFluentAI is designed to run **entirely on your own machine or server**.
+
+- The app is **open source** and self-hostable.
+- The language model runs **locally** (initially via [Ollama](https://ollama.com)) on the machine where the app is deployed.
+- Your writing, learning history and personal data stay with you.
+- **No cloud API, no telemetry, no external data transmission** at runtime.
+
+> Deploying as a public, managed service would be a separate architectural decision. The current model deliberately keeps everything local.
 
 ---
 
-## Development Philosophy
+## The Harness: Documentation as Source of Truth
 
-This project follows one simple rule:
+The `.harness/` directory is the project's **long-term memory** and **single source of truth**.
 
-> Every important architectural decision must be documented before implementation.
+Instead of keeping knowledge only inside AI conversations or the heads of contributors, every important architectural decision is documented here so that both developers and AI coding agents can reason consistently about the system.
 
-The Harness is considered the source of truth for the entire project.
+> **Guiding principle:** *Every important architectural decision must be documented before implementation.*
+
+The Harness intentionally contains **documentation instead of implementation**. It evolves together with the project.
+
+### Core documents
+
+| Document | Purpose |
+|----------|---------|
+| [`PROJECT_MANIFEST.md`](.harness/core/PROJECT_MANIFEST.md) | Mission, vision, problem, solution and non-goals. |
+| [`LEARNING_PHILOSOPHY.md`](.harness/core/LEARNING_PHILOSOPHY.md) | How the system teaches: principles, loop, feedback strategy, motivation. |
+| [`ARCHITECTURE.md`](.harness/core/ARCHITECTURE.md) | Agent-Oriented Architecture: the Learning Coach and internal agents. |
+| [`ARCHITECTURAL_DECISIONS.md`](.harness/core/ARCHITECTURAL_DECISIONS.md) | The decision log (ADRs), the historical record of architectural evolution. |
+| [`AGENT_GUIDELINES.md`](.harness/core/AGENT_GUIDELINES.md) | Rules governing AI coding agents that contribute to the codebase. |
+
+---
+
+## Architecture
+
+TypeFluentAI follows an **Agent-Oriented Architecture**.
+
+- The **Learning Coach** is the only component that communicates with the user. From the user's perspective, there is a single intelligent assistant.
+- **Internal agents** (Grammar Analysis, Vocabulary, Exercise Generation, Progress Tracking, etc.) may collaborate behind the Coach to solve specific problems. They never talk to the user directly.
+- A **provider abstraction** decouples the application from any specific local LLM runtime, so providers (e.g. Ollama) are replaceable and configurable.
+
+For the first web prototype, the Learning Coach is implemented as **a single LLM call** with a well-structured system prompt (see ADR #003). Specialized internal agents will be introduced only when a demonstrated responsibility justifies their separation.
+
+### Communication model
+
+```text
+User
+  ↓
+Learning Coach
+  ↓
+Local LLM (via provider abstraction, e.g. Ollama)
+  ↓
+Learning Coach
+  ↓
+User
+```
+
+---
+
+## Architectural Decisions
+
+Every important decision is documented in [`ARCHITECTURAL_DECISIONS.md`](.harness/core/ARCHITECTURAL_DECISIONS.md) with context, rationale, implications and future considerations.
+
+| # | Decision | Status |
+|---|----------|--------|
+| #001 | CLI as First User Interface | ✅ Accepted |
+| #002 | Local LLM Provider Architecture | ✅ Accepted |
+| #003 | Learning Coach Composition for the First Prototype | ✅ Accepted |
+| #004 | Web UI Replaces CLI as the Interface | ✅ Accepted |
 
 ---
 
 ## Current Status
 
-🚧 TypeFluentAI is currently in the Architecture & Design phase.
+🚧 TypeFluentAI is in the **Architecture & Design** phase.
 
-No production code has been written yet.
+The architectural foundation is defined and documented. The next milestone is implementing the **Web UI** (full-stack Next.js + React + TypeScript, backend-mediated local Ollama) that brings the Learning Loop to life as a self-hosted application.
 
-The current focus is on defining the learning philosophy, AI architecture and project foundations before implementation begins.
-
-Every architectural decision, document and implementation will be publicly documented as the project evolves.
+Every architectural decision, document and implementation is publicly documented as the project evolves.
 
 ---
 
@@ -82,10 +160,12 @@ Every architectural decision, document and implementation will be publicly docum
 
 ```text
 .
-├── .harness/
-├── assets/
-├── src/
-├── README.md
+├── .harness/          # Architectural knowledge: source of truth
+│   └── core/          #   Manifest, philosophy, architecture, decisions, guidelines
+├── assets/            # Branding and media
+├── docs/              # GitHub Pages landing site (index.html)
+├── src/               # Application source (planned)
+├── README.md          # Repository landing page
 ├── LICENSE
 ├── package.json
 └── .gitignore
