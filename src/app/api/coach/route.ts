@@ -31,6 +31,10 @@ function buildMessages(body: CoachRequest): CoachMessages {
         user: "",
       };
     }
+    const unchanged =
+      original === rewrite
+        ? "\n\n(Note: the learner's rewrite is IDENTICAL to the original writing. No modification was made, so no correction was applied.)"
+        : "";
     return {
       system: VERIFY_SYSTEM_PROMPT,
       user: `Here is the context for you to verify the learner's rewrite:
@@ -43,6 +47,7 @@ ${feedback}
 
 --- The learner's rewrite ---
 ${rewrite}
+${unchanged}
 
 Please verify the rewrite against your previous feedback, point by point.`,
     };

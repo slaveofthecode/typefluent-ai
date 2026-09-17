@@ -219,6 +219,28 @@ Transparency builds trust. A human reviewing an agent's work should be able to u
 
 ---
 
+# 13. Git Workflow and Branching
+
+The repository follows a simple, branch-per-work-item workflow. `main` is the integration branch and is never committed to directly.
+
+Agents must follow these rules:
+
+- **Never commit to `main` directly.** All changes are made on a dedicated branch and integrated through a pull request.
+- **Branch naming.** Use the established convention: `<kind>/<NNN>-<slug>`, where:
+  - `<kind>` is `feat`, `docs` or `fix`
+  - `<NNN>` is a short sequential counter per work item (e.g. `001` for the Web UI, `002` for the next item)
+  - `<slug>` is a short hyphenated description
+  - Examples: `feat/001-web-ui`, `docs/001-landing-and-web-ui`
+- **One work item per branch.** A branch should contain a single milestone, feature or task. Keep the scope focused.
+- **Always a pull request.** Work reaches `main` only via a PR reviewed and merged by the human. Merging is never done without explicit approval.
+- **PR hygiene.** The PR must have a descriptive title and a summary of what changed, how it was validated, and any relevant context.
+- **After the merge.** Feature branches may be kept briefly as historical record (a few days) and then deleted. Do not delete a branch without explicit approval.
+- **Validation before commit.** Run the defined checks (currently `bun run typecheck`) before committing. Follow section 8 (Validation and Testing).
+
+This workflow is deliberately simple. It exists to keep `main` production-safe and every change traceable, preserving the project's discipline of documented, intentional evolution.
+
+---
+
 # Status
 
 Version: 1.0
