@@ -4,6 +4,7 @@ import remarkGfm from "remark-gfm";
 const QUOTE_PAIRS: [RegExp, string][] = [
   [/["“«]([^"”»\n]{1,60}?)["”»]/g, `\`$1\``],
   [/(?<![\w])'([^'\n]{1,60}?)'(?![\w])/g, `\`$1\``],
+  [/(?<!\\)\\([^\\\n]{1,60}?)\\(?!\\)/g, `\`$1\``],
 ];
 
 function highlightQuotedSpans(text: string): string {

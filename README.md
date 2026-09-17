@@ -85,6 +85,56 @@ TypeFluentAI is designed to run **entirely on your own machine or server**.
 
 ---
 
+## Getting Started
+
+### Prerequisites
+
+- [Bun](https://bun.sh) (runtime)
+- [Ollama](https://ollama.com) with a model pulled locally
+
+### 1. Install and run Ollama
+
+```bash
+ollama pull llama3.2
+ollama serve
+```
+
+### 2. Install dependencies
+
+```bash
+bun install
+```
+
+### 3. Start the app
+
+```bash
+bun run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000).
+
+Pick a writing challenge, write your response, get coaching feedback, then rewrite your version and let the coach verify it.
+
+### Configuration
+
+All settings have local-safe defaults. To override them, copy `.env.example` to `.env.local` and adjust:
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `LLM_MODEL` | `llama3.2` | The Ollama model used by the Learning Coach. |
+| `OLLAMA_BASE_URL` | `http://localhost:11434` | Base URL of the local Ollama API. |
+
+### Scripts
+
+| Script | Command | Purpose |
+|--------|---------|---------|
+| `dev` | `next dev` | Start the development server. |
+| `build` | `next build` | Create a production build. |
+| `start` | `next start` | Start the production server. |
+| `typecheck` | `tsc --noEmit` | Type-check the codebase. |
+
+---
+
 ## The Harness: Documentation as Source of Truth
 
 The `.harness/` directory is the project's **long-term memory** and **single source of truth**.
@@ -116,7 +166,7 @@ TypeFluentAI follows an **Agent-Oriented Architecture**.
 - **Internal agents** (Grammar Analysis, Vocabulary, Exercise Generation, Progress Tracking, etc.) may collaborate behind the Coach to solve specific problems. They never talk to the user directly.
 - A **provider abstraction** decouples the application from any specific local LLM runtime, so providers (e.g. Ollama) are replaceable and configurable.
 
-For the first web prototype, the Learning Coach is implemented as **a single LLM call** with a well-structured system prompt (see ADR #003). Specialized internal agents will be introduced only when a demonstrated responsibility justifies their separation.
+For the first web prototype, the Learning Coach is implemented as **one LLM call per Learning Loop stage** (analyze, then verify) with well-structured system prompts (see ADR #003 and ADR #005). Specialized internal agents will be introduced only when a demonstrated responsibility justifies their separation.
 
 ### Communication model
 
@@ -144,14 +194,17 @@ Every important decision is documented in [`ARCHITECTURAL_DECISIONS.md`](.harnes
 | #002 | Local LLM Provider Architecture | ✅ Accepted |
 | #003 | Learning Coach Composition for the First Prototype | ✅ Accepted |
 | #004 | Web UI Replaces CLI as the Interface | ✅ Accepted |
+| #005 | One LLM Call per Learning Loop Stage | ✅ Accepted |
 
 ---
 
 ## Current Status
 
-🚧 TypeFluentAI is in the **Implementation** phase — Milestone M1 (Web UI prototype) is in progress.
+✅ **Milestone M1 (Web UI prototype) is implemented and merged.**
 
-The architectural foundation is defined and documented. The current milestone is implementing the **Web UI** (full-stack Next.js + React + TypeScript, backend-mediated local Ollama) that brings the Learning Loop to life as a self-hosted application. See the [`IMPLEMENTATION_ROADMAP.md`](.harness/core/IMPLEMENTATION_ROADMAP.md) for the ordered plan.
+The **Web UI** (full-stack Next.js + React + TypeScript, backend-mediated local Ollama) brings the Learning Loop to life as a self-hosted application: the learner picks a prompt, writes, receives streamed coaching feedback, rewrites their version, and the coach verifies it in-session.
+
+Next planned work: the [**Practice**](.harness/core/IMPLEMENTATION_ROADMAP.md) stage and **Milestone M2** (Learning Persistence & Progress). See the [`IMPLEMENTATION_ROADMAP.md`](.harness/core/IMPLEMENTATION_ROADMAP.md) for the ordered plan.
 
 Every architectural decision, document and implementation is publicly documented as the project evolves.
 
@@ -161,12 +214,16 @@ Every architectural decision, document and implementation is publicly documented
 
 ```text
 .
-├── .harness/          # Architectural knowledge: source of truth
-│   └── core/          #   Manifest, philosophy, architecture, decisions, guidelines
-├── assets/            # Branding and media
-├── docs/              # GitHub Pages landing site (index.html)
-├── src/               # Application source (planned)
-├── README.md          # Repository landing page
+├── .harness/            # Architectural knowledge: source of truth
+│   └── core/            #   Manifest, philosophy, architecture, decisions, guidelines
+├── assets/              # Branding and media
+├── docs/                # GitHub Pages landing site (index.html)
+├── src/                 # Application source
+│   ├── app/             #   Next.js App Router (pages + API routes)
+│   ├── components/      #   React components (LearningCoach, Markdown)
+│   └── lib/             #   Learning Coach prompts + LLM provider abstraction
+├── .env.example         # Environment configuration template
+├── README.md            # Repository landing page
 ├── LICENSE
 ├── package.json
 └── .gitignore
