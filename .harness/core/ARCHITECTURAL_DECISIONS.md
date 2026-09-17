@@ -199,6 +199,55 @@ The boundary around the Learning Coach must be preserved throughout this evoluti
 
 ---
 
+# Decision #005 — One LLM Call per Learning Loop Stage
+
+**Date:** 2026-09-17
+**Status:** Accepted
+**Affects:** Learning engine, agent architecture
+
+## Context
+
+Decision #003 defined the first prototype as a single Learning Coach backed by a single LLM call. That decision validated a one-shot flow: the user writes, the Coach analyzes and provides feedback, ending by inviting the user to rewrite on their own.
+
+That flow leaves the Learning Loop open. The user is told to rewrite but the application neither captures the rewrite nor verifies whether the feedback was applied. Without a verification turn, there is no way to know that the learner applied the corrections or to reinforce the learning (Learning Philosophy — Rewrite, Practice, Progress).
+
+The first prototype already demonstrated the value of a single Coach. What is missing is not agent orchestration but a second sequential stage in the same loop: verification of the rewrite.
+
+## Decision
+
+The Learning Coach performs **one LLM call per stage** of the Learning Loop.
+
+For the first web prototype, the loop contains two sequential calls:
+
+- **Analyze** — the Coach analyzes the written response and provides prioritized, encouraging feedback (existing behavior).
+- **Verify** — after the user submits their rewrite, the Coach compares the rewrite against the feedback it gave and confirms which corrections were applied, which were not, and whether the rewrite introduced any new issue.
+
+The user continues to interact with a single Coach (ADR #003 boundary is preserved). The interface between the user and the Coach does not change: only the number of sequential stages inside a single loop does.
+
+## Rationale
+
+The rewrite-verification turn is the mechanism that closes the Learning Loop in-session. It gives the learner concrete confirmation of applied corrections and keeps them accountable for following the coaching, which is the core value of active learning.
+
+Extending the existing route with a `stage` field keeps the single-Coach composition intact and avoids premature multi-agent complexity, consistent with the spirit of ADR #003: use the simplest structure that proves learning behavior.
+
+Each stage is represented by its own well-structured system prompt, keeping the Coach composition readable and evolvable.
+
+## Implications
+
+- The first prototype makes two LLM calls per completed loop (analyze + verify), not one.
+- The `/api/coach` route accepts a `stage` ("analyze" default, "verify") and composes the appropriate system prompt.
+- The verify stage receives the original text, the previous feedback, and the user's rewrite.
+- The boundary around the Learning Coach remains intact; future stages (Practice) or internal agents (M3) slot into the same structure.
+- Decision #003 is amended: "single LLM call" becomes "one call per stage", not "one call total".
+
+## Future Considerations
+
+Future loop stages (e.g. Practice) should follow the same pattern: one stage, one system prompt, one call.
+
+When the Coach is later decomposed into internal agents (M3), the stage prompts become natural candidates for agent responsibilities (e.g. a Verification agent) without changing the user-facing interaction.
+
+---
+
 # Decision #004 — Web UI Replaces CLI as the Interface
 
 **Date:** 2026-09-03

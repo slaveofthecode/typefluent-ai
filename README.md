@@ -104,6 +104,7 @@ The Harness intentionally contains **documentation instead of implementation**. 
 | [`ARCHITECTURE.md`](.harness/core/ARCHITECTURE.md) | Agent-Oriented Architecture: the Learning Coach and internal agents. |
 | [`ARCHITECTURAL_DECISIONS.md`](.harness/core/ARCHITECTURAL_DECISIONS.md) | The decision log (ADRs), the historical record of architectural evolution. |
 | [`AGENT_GUIDELINES.md`](.harness/core/AGENT_GUIDELINES.md) | Rules governing AI coding agents that contribute to the codebase. |
+| [`IMPLEMENTATION_ROADMAP.md`](.harness/core/IMPLEMENTATION_ROADMAP.md) | The ordered implementation plan: Web UI milestone and future milestones. |
 
 ---
 
@@ -148,9 +149,9 @@ Every important decision is documented in [`ARCHITECTURAL_DECISIONS.md`](.harnes
 
 ## Current Status
 
-🚧 TypeFluentAI is in the **Architecture & Design** phase.
+🚧 TypeFluentAI is in the **Implementation** phase — Milestone M1 (Web UI prototype) is in progress.
 
-The architectural foundation is defined and documented. The next milestone is implementing the **Web UI** (full-stack Next.js + React + TypeScript, backend-mediated local Ollama) that brings the Learning Loop to life as a self-hosted application.
+The architectural foundation is defined and documented. The current milestone is implementing the **Web UI** (full-stack Next.js + React + TypeScript, backend-mediated local Ollama) that brings the Learning Loop to life as a self-hosted application. See the [`IMPLEMENTATION_ROADMAP.md`](.harness/core/IMPLEMENTATION_ROADMAP.md) for the ordered plan.
 
 Every architectural decision, document and implementation is publicly documented as the project evolves.
 
